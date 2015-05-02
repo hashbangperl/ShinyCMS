@@ -40,6 +40,7 @@ requires (
 	'Text::CSV::Simple'                          => '0',
 	'File::Pid'                                  => '0',
 	'HTML::TreeBuilder'                          => '0',
+        'Catalyst::TraitFor::Component::ConfigPerSite' => '0.12',
 );
 
 recommends (
