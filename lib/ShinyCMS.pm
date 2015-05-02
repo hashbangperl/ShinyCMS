@@ -58,7 +58,10 @@ __PACKAGE__->config(
     },
 	'Plugin::ConfigLoader' => {
 		driver => {
-			'General' => { -InterPolateVars => 1 },
+			'General' => {
+			    -InterPolateVars => 1,
+			    -IncludeGlob => 1,
+			},
 		},
 	},
 );
