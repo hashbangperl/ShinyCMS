@@ -22,11 +22,20 @@ use ShinyCMS;
 use ShinyCMS::Schema;
 
 
-# Get a database connection
-my $schema = ShinyCMS::Schema->connect(
-	ShinyCMS->config->{ 'Model::DB' }->{ connect_info }
-);
+my $connect_info;
 
+# Get a database connection
+
+if ($ARGV[0]) {
+  $connect_info = { dsn => "dbi:mysql:$ARGV[0]", user => $ARGV[1], password => $ARGV[2] };
+} else {
+  $connect_info = ShinyCMS->config->{ 'Model::DB' }->{ connect_info };
+}
+
+use Data::Dumper;
+warn "creating shinycms with connection details : ", Dumper ($connect_info);
+
+my $schema = ShinyCMS::Schema->connect($connect_info);
 
 # Deploy the schema
 $schema->deploy(
