@@ -1,8 +1,7 @@
 package ShinyCMS::Model::DB;
 
-use strict;
-use base 'Catalyst::Model::DBIC::Schema';
-
+use Moose;
+extends 'Catalyst::Model::DBIC::ConfigPerSite';
 
 =head1 NAME
 
@@ -14,7 +13,7 @@ See L<ShinyCMS>
 
 =head1 DESCRIPTION
 
-L<Catalyst::Model::DBIC::Schema> Model using schema L<ShinyCMS::Schema>
+L<Catalyst::Model::DBIC::Schema> Model using schema L<ShinyCMS::Schema> via Catalyst::Model::DBIC::ConfigPerSite
 
 =head1 AUTHOR
 

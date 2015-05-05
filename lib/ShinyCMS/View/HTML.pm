@@ -5,6 +5,8 @@ use namespace::clean -except => 'meta';
 
 extends 'Catalyst::View::TT';
 
+with qw(Catalyst::TraitFor::View::TT::ConfigPerSite);
+
 
 =head1 NAME
 
