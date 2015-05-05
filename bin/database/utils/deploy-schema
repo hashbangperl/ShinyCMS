@@ -21,11 +21,8 @@ use lib "$Bin/../../../lib";
 use ShinyCMS;
 use ShinyCMS::Schema;
 
-
+# Get a database connection, either from command line or config file
 my $connect_info;
-
-# Get a database connection
-
 if ($ARGV[0]) {
   $connect_info = { dsn => "dbi:mysql:$ARGV[0]", user => $ARGV[1], password => $ARGV[2] };
 } else {
