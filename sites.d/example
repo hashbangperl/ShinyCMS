@@ -1,29 +1,9 @@
-name   TestBlogApp
-site_name    TestBlog
-default_view TT
-
-<Model::DB>
-        schema_class TestBlogApp::Schema
-        <connect_info>
-                      dsn dbi:SQLite:dbname=__path_to(../../test.db)__
-                      user username
-                      password password
-	</connect_info>
-       file_path /path/to/site/default
-</Model::DB>
-
-<View::TT>
-        TEMPLATE_EXTENSION .tt
-        WRAPPER            site-wrapper.tt
-	INCLUDE_PATH	   __path_to(../../templates)__
-</View::TT>
-
 <TraitFor::Component::ConfigPerSite>
- <foo.bar>
+ <somesite.com>
    <Model::DB>
-        schema_class TestBlogApp::Schema
+        schema_class ShinyCMS::Schema
         <connect_info>
-                      dsn dbi:SQLite:dbname=__path_to(../../test2.db)__
+                      dsn dbi:mysql:somesite_shinycms
                       user username
                       password password
         </connect_info>
@@ -34,16 +14,16 @@ default_view TT
    <View::TT>
         TEMPLATE_EXTENSION .tt
         WRAPPER            site-wrapper.tt
-        INCLUDE_PATH       __path_to(../../more_templates)__
+        INCLUDE_PATH       __path_to(site_templates/somesite.com)__
 	instance_cache_key foo_bar_view_tt
    </View::TT>
 
- </foo.bar>
- <baz.quuuz.tld>
+ </somesite.com>
+ <anothersite.org>
      <Model::DB>
-        schema_class TestBlogApp::Schema
+        schema_class ShinyCMS::Schema
         <connect_info>
-                      dsn dbi:SQLite:dbname=__path_to(../../test3.db)__
+                      dsn dbi:mysql:anothersite_shinycms
                       user username
                       password password
         </connect_info>
@@ -54,19 +34,9 @@ default_view TT
    <View::TT>
         TEMPLATE_EXTENSION .tt
         WRAPPER            site-wrapper.tt
-        INCLUDE_PATH       __path_to(../../yet_more_templates)__
+        INCLUDE_PATH       __path_to(site_templates/somesite.com)__
         instance_cache_key foo_bar_view_tt
    </View::TT>
 
- </baz.quuuz.tld>
-
- <just.the.one.oh.go.on>
-  <View::TT>
-        TEMPLATE_EXTENSION .tt
-        WRAPPER            site-wrapper.tt
-        INCLUDE_PATH       __path_to(../../yet_more_templates)__
-        instance_cache_key foo_bar_view_tt
-  </View::TT>
- </just.the.one.oh.go.on>
-
+ </anothersite.org>
 </TraitFor::Component::ConfigPerSite>
