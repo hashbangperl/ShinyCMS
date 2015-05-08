@@ -54,6 +54,9 @@ sub index : Path : Args( 0 ) {
 	my ( $self, $c ) = @_;
 	
 	my $captures = [ $self->default_section( $c ), $self->default_page( $c ) ];
+	use Data::Dumper;
+	$c->log->warn(Dumper($captures));
+
 	$c->go( 'view_page', $captures, [] );
 }
 
@@ -67,9 +70,16 @@ Return the default section.
 sub default_section {
 	my ( $self, $c ) = @_;
 	
-	# TODO: allow CMS Admins to configure this
-	$c->stash->{ section } = $c->model( 'DB::CmsSection' )->first;
-	
+	my $default_section;
+	unless ($default_section = $c->model( 'DB::CmsSection')->search({is_default => 1})->first ) {
+	     $default_section = $c->model( 'DB::CmsSection' )->first;
+	}
+	$c->stash->{ section } = $default_section;
+
+	if ($default_section) {
+	    $c->log->warn("default section : $default_section ", $default_section->id);
+	}
+
 	# Skip to 'no data yet' page if no sections found in database
 	$c->detach( 'no_page_data' ) unless $c->stash->{ section };
 	
@@ -84,18 +94,21 @@ Return the default page.
 
 =cut
 
+#FIXME : relying on url_name is brittle as it's not required/can be blank - either construct url or forward properly using id
 sub default_page {
 	my ( $self, $c ) = @_;
-	
 	if ( $c->stash->{ section }->default_page ) {
+	  my $default_page = $c->stash->{ section }->default_page;
+	  $c->log->warn("getting default page from section " . $default_page);
 		# Return the default page for this section, if one is set
 		return $c->stash->{ section }->default_page->url_name;
 	}
 	else {
-		# TODO: Handle if section exists but has no pages
-		
-		# Return the first page added to the default section
-		return $c->stash->{ section }->cms_pages->first->url_name;
+	  # TODO: Handle if section exists but has no pages
+	  my $fallback_page = $c->stash->{ section }->cms_pages->first;
+	  $c->log->warn("no default page using " . $fallback_page);
+	  # Return the first page added to the default section
+	  return $fallback_page->url_name;
 	}
 }
 

@@ -89,6 +89,12 @@ __PACKAGE__->table("cms_section");
   default_value: current_timestamp
   is_nullable: 0
 
+=head2 is_default
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -113,6 +119,8 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "is_default",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -179,8 +187,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2014-02-08 15:48:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EU30Hip/GMNKUaQ8UNQeQA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-05-06 14:20:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XwKwHP3GJLmip1Be/pZDNA
 
 
 =head2 pages
@@ -198,6 +206,16 @@ sub pages {
 			order_by => 'menu_position',
 		}
 	);
+}
+
+sub store_column {
+  my ( $self, $name, $value ) = @_;
+  my $retval = $self->next::method($name, $value);
+  if (($name eq 'is_default') && $value) {
+    my $schema = $self->result_source->schema;
+    $schema->resultset('CmsSection')->search({id => { '!=' => $self->id } })->update({is_default => 0});
+  }
+  return $retval;
 }
 
 

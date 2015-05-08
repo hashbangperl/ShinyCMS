@@ -342,6 +342,7 @@ create table if not exists cms_section (
 	
 	hidden			boolean			not null default 0,
 	created			timestamp		not null default current_timestamp,
+        is_default              tinyint(1) not null default 0,
 	
 	unique  key cms_section_url_name ( url_name ),
 	foreign key cms_section_default_page ( default_page ) references cms_page ( id ),
